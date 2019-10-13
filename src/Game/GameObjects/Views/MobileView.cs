@@ -23,6 +23,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Xml.Schema;
 
 using ClassicUO.Game.Data;
 using ClassicUO.Game.Managers;
@@ -472,6 +473,14 @@ namespace ClassicUO.Game.GameObjects
                             owner.FrameInfo.Height = yy + frame.Height;
                     }
 
+                    if (entity != null && entity.Layer != Layer.Invalid)
+                    {
+                        // this texture is assigned because we needs to use it in effect
+                        entity.Texture = frame;
+                        entity.RealScreenPosition.X = x;
+                        entity.RealScreenPosition.Y = y;
+                    }
+
                     owner.Texture = frame;
                     owner.Select(mirror ? x + frame.Width - SelectedObject.TranslatedMousePositionByViewport.X : SelectedObject.TranslatedMousePositionByViewport.X - x, SelectedObject.TranslatedMousePositionByViewport.Y - y);
 
@@ -487,12 +496,8 @@ namespace ClassicUO.Game.GameObjects
 
         public override void Select(int x, int y)
         {
-            if (SelectedObject.Object != this && Texture.Contains(x, y)) SelectedObject.Object = this;
-
-            //if (SelectedObject.IsPointInMobile(this, x, y))
-            //{
-            //    SelectedObject.Object = this;
-            //}
+            if (SelectedObject.Object != this && Texture.Contains(x, y)) 
+                SelectedObject.Object = this;
         }
 
         internal static bool IsCovered(Mobile mobile, Layer layer)

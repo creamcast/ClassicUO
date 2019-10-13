@@ -108,8 +108,19 @@ namespace ClassicUO.Game.GameObjects
 
             if (Texture != null)
             {
+                int offsetX = 0, offsetY = 0;
+
+                if (Source is Item it && it.Layer != Layer.Invalid)
+                {
+                    offsetX = it.RealScreenPosition.X;
+                    offsetY = it.RealScreenPosition.Y;
+                }
+
                 Bounds.X = (Texture.Width >> 1) - 22 - (int) Offset.X;
                 Bounds.Y = Texture.Height - 44 + (int) (Offset.Z - Offset.Y);
+
+                Bounds.X += offsetX;
+                Bounds.Y += offsetY;
             }
 
             ref readonly StaticTiles data = ref FileManager.TileData.StaticData[Graphic];
